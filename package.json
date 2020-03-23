@@ -1,0 +1,40 @@
+{
+   "name": "jaebook-chat-server",
+   "version": "0.0.1",
+   "license": "MIT",
+   "description": "JaeBook Chat Server",
+   "scripts": {
+      "build": "tsc",
+      "start": "cross-env NODE_ENV=production node build/server.js",
+      "dev": "cross-env NODE_ENV=development nodemon",
+      "lint": "eslint --ext .ts,.js . --ignore-path .gitignore .",
+      "prod": "yarn build && yarn start"
+   },
+   "devDependencies": {
+      "@types/cors": "^2.8.6",
+      "@types/helmet": "^0.0.45",
+      "@types/node": "^13.5.0",
+      "@types/socket.io": "^2.1.4",
+      "@types/winston": "^2.4.4",
+      "@typescript-eslint/eslint-plugin": "^2.18.0",
+      "@typescript-eslint/parser": "^2.18.0",
+      "eslint": "^6.8.0",
+      "eslint-config-prettier": "^6.9.0",
+      "eslint-plugin-prettier": "^3.1.2",
+      "nodemon": "^2.0.2",
+      "prettier": "^1.19.1",
+      "ts-node": "^8.5.4",
+      "typescript": "^3.8.3"
+   },
+   "dependencies": {
+      "@sentry/node": "^5.14.2",
+      "cors": "^2.8.5",
+      "cross-env": "^7.0.0",
+      "dotenv": "^8.2.0",
+      "express": "^4.15.4",
+      "helmet": "^3.21.2",
+      "socket.io": "^2.3.0",
+      "winston": "^3.2.1",
+      "winston-daily-rotate-file": "^4.4.2"
+   }
+}
