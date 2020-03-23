@@ -9,6 +9,7 @@ export class App {
     private app: express.Application;
     private server: http.Server;
     private io: SocketIO.Server;
+    private peopleCounter: number = 0;
 
     constructor() {
         this.app = express();
@@ -33,13 +34,18 @@ export class App {
             });
 
             this.io.on("connect", (socket: any) => {
+                const chatDisplayName: string = this.createChatDisplayName(10);
+                socket.name = chatDisplayName;
+                socket.userId = chatDisplayName;
+                this.peopleCounter++;
                 logger.info(`Connected client on port ${port}`);
 
-                socket.on("join", (data: any) => {
-                    logger.info(`chat join: ${data.name}(${data.userId})`);
+                socket.on("join", () => {
+                    logger.info(
+                        `chat join: ${socket.name}(${socket.userId}), now people: ${this.peopleCounter}`,
+                    );
 
-                    socket.name = data.name;
-                    socket.userId = data.userId;
+                    this.io.emit("chatPeople", this.peopleCounter);
                 });
 
                 socket.on("send message", (data: any) => {
@@ -56,13 +62,37 @@ export class App {
                 });
 
                 socket.on("disconnect", () => {
+                    if (
+                        socket.name !== undefined &&
+                        socket.userId !== undefined
+                    ) {
+                        this.peopleCounter--;
+                    }
+
                     logger.info(
                         `${socket.name}(${socket.userId}) disconnected`,
                     );
+
+                    this.io.emit("chatPeople", this.peopleCounter);
                 });
             });
         } catch (error) {
             logger.error(error);
         }
+    }
+
+    private createChatDisplayName(length: number): string {
+        let result = "";
+        const characters =
+            "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        const charactersLength = characters.length;
+
+        for (let i = 0; i < length; i++) {
+            result += characters.charAt(
+                Math.floor(Math.random() * charactersLength),
+            );
+        }
+
+        return result;
     }
 }
