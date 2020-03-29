@@ -34,7 +34,7 @@ export class App {
             });
 
             this.io.on("connect", (socket: any) => {
-                const chatDisplayName: string = this.createChatDisplayName(10);
+                const chatDisplayName: string = this.createChatDisplayName(6);
                 socket.name = chatDisplayName;
                 socket.userId = chatDisplayName;
                 this.peopleCounter++;
